@@ -98,14 +98,22 @@ class SimplePageRank(object):
         """
         def distribute_weights((node, (weight, targets))):
             # YOUR CODE HERE
-            print("node is", node)
-            print("weight is", weight)
-            print("targets are", targets)
-
             returnToSelf = 0.05 * weight
             distToEdges = 0.85 / num_nodes * weight
             distToAll = 0.1
-            return [node , [(target, weight), (node, targets)]]
+
+            newWeights = [(node, returnToSelf + distToAll)] # list of (node, new weight)
+            for t in targets:
+                newWeights.append((t, distToEdges + distToAll))
+            if not targets:
+                newWeights.append(""" some how implement giving distToEdges +
+                        distToAll to all other nodes in the graph (except for
+                        the current node) """)
+            newWeights.append(""" some how implement giving distToAll to all
+                    other nodes in the graph that are NOT the current node OR
+                    the nodes in target """)
+
+            return [newWeights, (node, targets)]
 
         """
         Reducer phase.
@@ -117,12 +125,16 @@ class SimplePageRank(object):
         The output of this phase should be in the same format as the input to the mapper.
         You are allowed to change the signature if you desire to.
         """
-        def collect_weights((node, values)):
+        def collect_weights(nodeInfo):
             # YOUR CODE HERE
-            #return [(node, (weight, targets))]
-            print("node is",node)
-            print("values are",values)
-            return [node, values]
+            weights = nodeInfo[0]
+            edges = nodeInfo[1]
+
+            for node_value in weights:
+                if node_value[0] is edges[0]:
+                    newWeight = node_value[1]
+
+            return [edges[0], (newWeight, edges[1])]
 
         return nodes\
                 .flatMap(distribute_weights)\
