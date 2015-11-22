@@ -5,9 +5,9 @@ as described in the first part of the project.
 class SimplePageRank(object):
 
     """
-    Keeps track of the rdd used as the input data. 
+    Keeps track of the rdd used as the input data.
     This should be a list of lines similar to the example input files.
-    You do not need to change this method, but feel free to do so to suit your needs. 
+    You do not need to change this method, but feel free to do so to suit your needs.
     However, the signature MUST stay the same.
     """
     def __init__(self, input_rdd):
@@ -15,9 +15,9 @@ class SimplePageRank(object):
 
     """
     Computes the pagerank algorithm for num_iters number of iterations.
-    You do not need to change this method, but feel free to do so to suit your needs. 
+    You do not need to change this method, but feel free to do so to suit your needs.
     However, the signature MUST stay the same.
-    The output should be a rdd of (pagerank score, node label) pairs, 
+    The output should be a rdd of (pagerank score, node label) pairs,
     sorted by pagerank score in descending order.
     """
     def compute_pagerank(self, num_iters):
@@ -39,7 +39,7 @@ class SimplePageRank(object):
     In the default implemention, the rdd is simply a collection of (node label, (current weight, target)) tuples.
     Lines in the input_rdd file will either be blank or begin with "#", which
     should be ignored, or be of the form "source[whitespace]target" where source and target
-    are labels for nodes that are integers. 
+    are labels for nodes that are integers.
     For example, the line:
     1    3
     tells us that there is an edge going from node 1 to node 3.
@@ -63,9 +63,9 @@ class SimplePageRank(object):
 
         # collects all outgoing target nodes for a given source node
         def reduce_edges(e1, e2):
-            return e1 | e2 
+            return e1 | e2
 
-        # sets the weight of every node to 0, and formats the output to the 
+        # sets the weight of every node to 0, and formats the output to the
         # specified format of (source (weight, targets))
         def initialize_weights((source, targets)):
             return (source, (1.0, targets))
@@ -88,9 +88,9 @@ class SimplePageRank(object):
         Distributes pagerank scores for a given node to each of its targets,
         as specified by the update algorithm.
         Some important things to consider:
-        We can't just emit (target, weight) values to the reduce phase, 
+        We can't just emit (target, weight) values to the reduce phase,
         because then the reduce phase will lose information on the outgoing edges
-        for the nodes. We have to emit the (node, targets) pairs too so that 
+        for the nodes. We have to emit the (node, targets) pairs too so that
         the edges can be remembered for the next iteration.
         Think about the best output format for the mapper so the reducer can
         get both types of information.
@@ -98,7 +98,14 @@ class SimplePageRank(object):
         """
         def distribute_weights((node, (weight, targets))):
             # YOUR CODE HERE
-            return []        
+            print("node is", node)
+            print("weight is", weight)
+            print("targets are", targets)
+
+            returnToSelf = 0.05 * weight
+            distToEdges = 0.85 / num_nodes * weight
+            distToAll = 0.1
+            return [node , [(target, weight), (node, targets)]]
 
         """
         Reducer phase.
@@ -112,7 +119,10 @@ class SimplePageRank(object):
         """
         def collect_weights((node, values)):
             # YOUR CODE HERE
-            return []
+            #return [(node, (weight, targets))]
+            print("node is",node)
+            print("values are",values)
+            return [node, values]
 
         return nodes\
                 .flatMap(distribute_weights)\
@@ -121,7 +131,7 @@ class SimplePageRank(object):
 
     """
     Formats the output of the data to the format required by the specs.
-    If you changed the format of the update_weights method you will 
+    If you changed the format of the update_weights method you will
     have to change this as well.
     Otherwise, this is fine as is.
     """
