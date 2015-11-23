@@ -97,21 +97,30 @@ class SimplePageRank(object):
         You are allowed to change the signature if you desire to.
         """
         def distribute_weights((node, (weight, targets))):
-            # YOUR CODE HERE
+            """ Declare update values for 3 different cases """
             returnToSelf = 0.05 * weight
-            distToEdges = 0.85 / num_nodes * weight
+            distToEdges = 0.85 / len(targets) * weight if targets \
+                    else distToEdges = 0.85 / (num_nodes - 1) * weight
             distToAll = 0.1
 
-            newWeights = [(node, returnToSelf + distToAll)] # list of (node, new weight)
+            """ Sets present node value """
+            newWeights = [(node, returnToSelf + distToAll)]
+            """ Sets 85% values (and 10%) for case 1 -- only to targets """
             for t in targets:
                 newWeights.append((t, distToEdges + distToAll))
+
             if not targets:
-                newWeights.append(""" some how implement giving distToEdges +
-                        distToAll to all other nodes in the graph (except for
-                        the current node) """)
-            newWeights.append(""" some how implement giving distToAll to all
-                    other nodes in the graph that are NOT the current node OR
-                    the nodes in target """)
+                """ Sets 85% values(and 10%) for case 2 """
+                for i in range(0, num_nodes):
+                    if str(i) == node:
+                        continue
+                    newWeights.append((i, distToEdges + distToAll))
+            else:
+                """ Sets 1% values(and 10%) for case 2 """
+                for i in range(0, num_nodes):
+                    if str(i) == node and str(i) in targets:
+                        continue
+                    newWeight.append((i, distToAll))
 
             return [newWeights, (node, targets)]
 
