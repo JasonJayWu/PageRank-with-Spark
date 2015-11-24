@@ -20,10 +20,11 @@ def check(test_input, method, num_iters):
                 print "Missing entry for node {} on {} on input {} for {} iterations.".format(n, m, test_input, num_iters)
                 return
             if abs(d[n] - float(w)) > 0.01:
+                print "-------------",d[n],"---------------",float(w)
                 print "Wrong weight for node {} {} on input {} for {} iterations failed.".format(n, m, test_input, num_iters)
                 return
         print "{} on input {} for {} iterations passed.".format(m, test_input, num_iters)
-                         
+
 for method in ["s", "b"]:
     for test_input in ["simple1", "simple2", "simple3"]:
         for num_iters in [1, 20]:

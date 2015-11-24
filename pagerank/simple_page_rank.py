@@ -97,32 +97,27 @@ class SimplePageRank(object):
         You are allowed to change the signature if you desire to.
         """
         def distribute_weights((node, (weight, targets))):
-            """ Declare update values for 3 different cases """
+            # YOUR CODE HERE
             returnToSelf = 0.05 * weight
-            distToEdges = 0.85 / len(targets) * weight if targets \
-                    else distToEdges = 0.85 / (num_nodes - 1) * weight
+            distToEdges = 0.85 * weight
             distToAll = 0.1
+            if targets:
+                weight_to_each = distToEdges / len(targets)
+            else :
+                weight_to_each = distToEdges / num_nodes
 
-            """ Sets present node value """
             newWeights = [(node, returnToSelf + distToAll)]
-            """ Sets 85% values (and 10%) for case 1 -- only to targets """
             for t in targets:
-                newWeights.append((t, distToEdges + distToAll))
-
+                newWeights.append((t, weight_to_each))
             if not targets:
-                """ Sets 85% values (and 10%) for case 2 """
-                for i in range(0, num_nodes):
-                    if i == node:
-                        continue
-                    newWeights.append((i, distToEdges + distToAll))
-            else:
-                """ Sets 10% values for case 1 -- everything but targets """
-                for i in range(0, num_nodes):
-                    if i == node or i in targets:
-                        continue
-                    newWeight.append((i, distToAll))
+                for temp_node in range(0,num_nodes):
+                    if node != temp_node:
+                        newWeights.append((temp_node,weight_to_each))
+            for tempNode in range(0,num_nodes):
+                if ((tempNode != node)):
+                    newWeights.append((tempNode,distToAll))
 
-            return [newWeights, (node, targets)]
+            return [(node, (newWeights,targets))]
 
         """
         Reducer phase.
@@ -134,15 +129,25 @@ class SimplePageRank(object):
         The output of this phase should be in the same format as the input to the mapper.
         You are allowed to change the signature if you desire to.
         """
-        def collect_weights(nodeInfo):
-            weights = nodeInfo[0]
-            edges = nodeInfo[1]
+        def collect_weights((node,newWeightsTargetsList)):
+            # YOUR CODE HERE
 
-            for node_value in weights:
-                if node_value[0] is edges[0]:
-                    newWeight = node_value[1]
+            newerWeights = {}
+            weight = 0
+            targets = []
+            for element in newWeightsTargetsList:
+                newWeights = element[0]
+                newtargets = element[1]
+                for (contributingnode,individual_weight) in newWeights:
+                    weight += individual_weight
+                targets = newtargets
 
-            return [edges[0], (newWeight, edges[1])]
+
+              #  if other_node not in newerWeights:
+              #      newerWeights.append(other_node,new_weight)
+              #  else :
+              #      newerWeights[other_node] += new_weight
+            return (node, (weight,targets))
 
         return nodes\
                 .flatMap(distribute_weights)\
