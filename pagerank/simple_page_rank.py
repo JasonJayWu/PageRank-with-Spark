@@ -117,8 +117,11 @@ class SimplePageRank(object):
             for n in range(0,num_nodes):
                 newWeights.append((n, distToAll)) """
 
-            print "(node, value) pairs being passed into COLLECT_WEIGHTS from node", node, "\n", newWeights, "\n"
-            return [(node, (newWeights, targets))]
+            targets = (node, targets)
+            newWeights.append(targets)
+
+            #print "output of mapper is:","\n",newWeights
+            return newWeights
 
         """
         Reducer phase.
@@ -130,20 +133,15 @@ class SimplePageRank(object):
         The output of this phase should be in the same format as the input to the mapper.
         You are allowed to change the signature if you desire to.
         """
-        def collect_weights((node, newWeights_targetsList)):
+        def collect_weights((node, newWeights)):
             weight = 0.1
             targets = []
-            for element in newWeights_targetsList:
-                print "new element:", element
-                newWeights = element[0]
-                newTargets = element[1]
-                for (contributing_node, individual_weight) in newWeights:
-                    weight += individual_weight
-                    print "\t", "weight is now", weight, "after adding", individual_weight
-                targets = newTargets
-                print "end of outer for loop: weight is", weight
+            for entry in newWeights:
+                if isinstance(entry, float):
+                    weight += entry
+                else:
+                    targets = entry
 
-            print "*** ({0}, ({1}, {2})) *** {3}".format(node, weight, targets, "\n")
             return (node, (weight, targets))
 
         return nodes\
