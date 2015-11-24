@@ -104,23 +104,20 @@ class SimplePageRank(object):
 
             """ Add 5% of weight to current node """
             newWeights = [(node, returnToSelf)]
+
             """ Iterate targets to add 85%/#targets to each """
             for t in targets:
                 newWeights.append((t, distToEdges))
+
             """ Iterates all nodes (when no targets) to add 85%/#nodes-1 to each """
             if not targets:
                 for n in range(0,num_nodes):
                     if n != node:
                         newWeights.append((n, distToEdges))
-            # see weight initialization in COLLECT_WEIGHTS
-            """ Iterates all nodes to add 10% to each
-            for n in range(0,num_nodes):
-                newWeights.append((n, distToAll)) """
 
             targets = (node, targets)
-            newWeights.append(targets)
+            newWeights.append(targets)  # Append targets for next iteration
 
-            #print "output of mapper is:","\n",newWeights
             return newWeights
 
         """
