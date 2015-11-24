@@ -110,15 +110,15 @@ class SimplePageRank(object):
                 newWeights.append((t, distToEdges + distToAll))
 
             if not targets:
-                """ Sets 85% values(and 10%) for case 2 """
+                """ Sets 85% values (and 10%) for case 2 """
                 for i in range(0, num_nodes):
-                    if str(i) == node:
+                    if i == node:
                         continue
                     newWeights.append((i, distToEdges + distToAll))
             else:
-                """ Sets 1% values(and 10%) for case 2 """
+                """ Sets 10% values for case 1 -- everything but targets """
                 for i in range(0, num_nodes):
-                    if str(i) == node and str(i) in targets:
+                    if i == node or i in targets:
                         continue
                     newWeight.append((i, distToAll))
 
@@ -135,7 +135,6 @@ class SimplePageRank(object):
         You are allowed to change the signature if you desire to.
         """
         def collect_weights(nodeInfo):
-            # YOUR CODE HERE
             weights = nodeInfo[0]
             edges = nodeInfo[1]
 
