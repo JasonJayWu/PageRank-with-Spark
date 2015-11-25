@@ -97,32 +97,27 @@ class SimplePageRank(object):
         You are allowed to change the signature if you desire to.
         """
         def distribute_weights((node, (weight, targets))):
-            """ Declare update values for 3 different cases """
+            """ Set weight values for all cases """
             returnToSelf = 0.05 * weight
-            distToEdges = 0.85 / len(targets) * weight if targets \
-                    else distToEdges = 0.85 / (num_nodes - 1) * weight
-            distToAll = 0.1
+            distToEdges = 0.85 / len(targets) * weight if targets else 0.85 / (num_nodes - 1 ) * weight
 
-            """ Sets present node value """
-            newWeights = [(node, returnToSelf + distToAll)]
-            """ Sets 85% values (and 10%) for case 1 -- only to targets """
+            """ Add 5% of weight to current node """
+            newWeights = [(node, returnToSelf)]
+
+            """ Iterate targets to add 85%/#targets to each """
             for t in targets:
-                newWeights.append((t, distToEdges + distToAll))
+                newWeights.append((t, distToEdges))
 
+            """ Iterates all nodes (when no targets) to add 85%/#nodes-1 to each """
             if not targets:
-                """ Sets 85% values (and 10%) for case 2 """
-                for i in range(0, num_nodes):
-                    if i == node:
-                        continue
-                    newWeights.append((i, distToEdges + distToAll))
-            else:
-                """ Sets 10% values for case 1 -- everything but targets """
-                for i in range(0, num_nodes):
-                    if i == node or i in targets:
-                        continue
-                    newWeight.append((i, distToAll))
+                for n in range(0,num_nodes):
+                    if n != node:
+                        newWeights.append((n, distToEdges))
 
-            return [newWeights, (node, targets)]
+            targets = (node, targets)
+            newWeights.append(targets)  # Append targets for next iteration
+
+            return newWeights
 
         """
         Reducer phase.
@@ -134,15 +129,16 @@ class SimplePageRank(object):
         The output of this phase should be in the same format as the input to the mapper.
         You are allowed to change the signature if you desire to.
         """
-        def collect_weights(nodeInfo):
-            weights = nodeInfo[0]
-            edges = nodeInfo[1]
+        def collect_weights((node, newWeights)):
+            weight = 0.1
+            targets = []
+            for entry in newWeights:
+                if isinstance(entry, float):
+                    weight += entry
+                else:
+                    targets = entry
 
-            for node_value in weights:
-                if node_value[0] is edges[0]:
-                    newWeight = node_value[1]
-
-            return [edges[0], (newWeight, edges[1])]
+            return (node, (weight, targets))
 
         return nodes\
                 .flatMap(distribute_weights)\
