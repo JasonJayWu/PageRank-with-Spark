@@ -97,10 +97,9 @@ class SimplePageRank(object):
         You are allowed to change the signature if you desire to.
         """
         def distribute_weights((node, (weight, targets))):
-            """ Set weight values for 4 cases """
+            """ Set weight values for all cases """
             returnToSelf = 0.05 * weight
             distToEdges = 0.85 / len(targets) * weight if targets else 0.85 / (num_nodes - 1 ) * weight
-            distToAll = 0.1
 
             """ Add 5% of weight to current node """
             newWeights = [(node, returnToSelf)]

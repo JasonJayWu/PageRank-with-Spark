@@ -13,6 +13,15 @@ class BackedgesPageRank(SimplePageRank):
     You are free to override them if you so desire, but the signatures
     must remain the same.
     """
+    def __init__(self, input_rdd):
+        self.input_rdd = input_rdd
+
+    def compute_pagerank(self, num_iters):
+        nodes = self.initialize_nodes(self.input_rdd)
+        num_nodes = nodes.count()
+        for i in range(0, num_iters):
+            nodes = self.update_weights(nodes, num_nodes)
+        return self.format_output(nodes)
 
     """
     This time you will be responsible for implementing the initialization
@@ -29,9 +38,28 @@ class BackedgesPageRank(SimplePageRank):
         # know that 10% of the score you sent out from the previous
         # iteration will get sent back.
 
+        def emit_edges(line):
+            if len(line) == 0 or line[0] == "#":
+                return []
+            source, target = tuple(map(int, line.split()))
+            edge = (source, frozenset([target]))
+            self_source = (source, frozenset())
+            self_target = (target, frozenset())
+            return [edge, self_source, self_target]
 
+        def reduce_edges(e1, e2):
+            return e1 | e2
 
-        return input_rdd.filter(lambda x: False)
+        def initialize_weights((source, targets)):
+            return (source, (1.0, targets, 1.0))
+
+        nodes = input_rdd\
+                .flatMap(emit_edges)\
+                .reduceByKey(reduce_edges)\
+                .map(initialize_weights)
+
+        return nodes
+        #return input_rdd.filter(lambda x: False)
 
     """
     You will also implement update_weights and format_output from scratch.
@@ -42,14 +70,13 @@ class BackedgesPageRank(SimplePageRank):
     @staticmethod
     def update_weights(nodes, num_nodes):
 
-        def distribute_weights((node, (weight, targets))):
+        def distribute_weights((node, (weight, targets, backedge))):
             """ Set weight values for 4 cases """
             returnToSelf = 0.05 * weight
             distToEdges = 0.85 / len(targets) * weight if targets else 0.85 / (num_nodes - 1 ) * weight
-            distToAll = 0.1
 
             """ Add 5% of weight to current node """
-            newWeights = [(node, returnToSelf)]
+            newWeights = [(node, returnToSelf + (.1*backedge))]
 
             """ Iterate targets to add 85%/#targets to each """
             for t in targets:
@@ -64,18 +91,24 @@ class BackedgesPageRank(SimplePageRank):
             targets = (node, targets)
             newWeights.append(targets)  # Append targets for next iteration
 
+            """ Adds backedge """
+            newWeights.append((node, backedge))
+
             return newWeights
 
         def collect_weights((node, newWeights)):
             weight = 0.1
             targets = []
+            backEdge = None
             for entry in newWeights:
                 if isinstance(entry, float):
                     weight += entry
+                elif (entry == node):
+                    backEdge = entry
                 else:
                     targets = entry
 
-            return (node, (weight, targets))
+            return (node, (weight, targets, backEdge))
 
         return nodes\
                 .flatMap(distribute_weights)\
@@ -85,5 +118,8 @@ class BackedgesPageRank(SimplePageRank):
 
     @staticmethod
     def format_output(nodes):
-        # YOUR CODE HERE
-        return nodes.filter(lambda x: False)
+        return nodes\
+        .map(lambda (node, (weight, targets, old_weight)): (weight, node))\
+        .sortByKey(ascending = False)\
+        .map(lambda (weight, node): (node, weight))
+        #return nodes.filter(lambda x: False)
