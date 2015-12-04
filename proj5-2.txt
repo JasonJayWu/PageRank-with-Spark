@@ -7,7 +7,7 @@ scenarios take?
 **************************  Performance in 8 Scenarios  ***************************
 * Instances | Mode: S FaceBook | Mode: B Facebook | Mode S: Enron | Mode B: Enron *
 *    5            65.43 min          67.14 min        69.35 min       75.55 min   *
-*   10                                                                            *
+*   10            10.11 min          11.14 min        11.40 min       12.58 min   *
 ***********************************************************************************
 
 2)
@@ -36,8 +36,10 @@ you increased the partition count?
 Remember the price of single c1.medium machine is $0.0161 per Hour, and a
 cluster with 10 slaves has 11 machines (the master counts as one).
 
-Pre-part 4:    240 min --
-Part 4:     277.47 min --
-Part 5:
+Pre-part 4:        240 min --
+Part 4:         277.47 min --
+Part 5 w/ 500:   45.23 min --
+Part 5 w/ 10:     2.58 min --
+
 Total:
 
