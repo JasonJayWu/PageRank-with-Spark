@@ -73,6 +73,7 @@ class BackedgesPageRank(SimplePageRank):
             """ Set weight values for 4 cases """
             returnToSelf = 0.05 * weight
             distToEdges = 0.85 / len(targets) * weight if targets else 0.85 / (num_nodes - 1 ) * weight
+
             nextBackWeight = weight
             """ Add 5% of weight to current node """
             newWeights = [(node, (returnToSelf + (.1 * backedge), nextBackWeight, targets))]
@@ -81,17 +82,11 @@ class BackedgesPageRank(SimplePageRank):
             if targets:
                 for t in targets:
                     newWeights.append((t, (distToEdges, 0, None)))
-            """if not targets:"""
             if not targets:
                 for n in range(0,num_nodes):
                     if n != node:
                         newWeights.append((n, (distToEdges, 0, None)))
-            """ Iterate targets to add 85%/#targets to each """
 
-            """targets = (node, targets)
-            newWeights.append(targets)  # Append targets for next iteration
-
-            newWeights.append((node, backedge))"""
 
             return newWeights
 
