@@ -1,0 +1,43 @@
+1)
+    Run your code for both SimplePageRank and BackedgesPageRank for 20
+iterations on both Facebook dataset and the Enron dataset, parititioned into
+chunks of 500, on clusters of size 5 and 10. How long do each of these 8
+scenarios take?
+
+**************************  Performance in 8 Scenarios  ***************************
+* Instances | Mode: S FaceBook | Mode: B Facebook | Mode S: Enron | Mode B: Enron *
+*    5            65.43 min          67.14 min        69.35 min       75.55 min   *
+*   10                                                                            *
+***********************************************************************************
+
+2)
+    When running SimplePageRank on the 10 instances with a repartition count of
+500, what was the ratio of size of the input file to the runtime of your
+program for the Enron dataset? How about the Facebook dataset? Does this match
+your expectations?
+
+
+3)
+   What was the speedup for 10 instances relative to 5 instances for 20 iterations
+of BackedgesPageRank on the Enron dataset with a repartition count of 500? What
+do you conclude about how well Spark parallelizes your work? How does the
+algorithm scale in regards to strong scaling? weak scaling?
+
+
+4)
+    In part 5, you tinkered with the repartition count. at what repartition
+count was your code the fastest on average? Why do you think it would go slower
+if you decreased the partition count? Why do you think it would go slower if
+you increased the partition count?
+
+
+5)
+    How many dollars in EC2 credits did you use to complete this project?
+Remember the price of single c1.medium machine is $0.0161 per Hour, and a
+cluster with 10 slaves has 11 machines (the master counts as one).
+
+Pre-part 4:    240 min --
+Part 4:     277.47 min --
+Part 5:
+Total:
+
