@@ -40,6 +40,7 @@ Pre-part 4:        240 min --
 Part 4:         277.47 min --
 Part 5 w/ 500:   45.23 min --
 Part 5 w/ 10:     2.58 min --
+Part 5 w/ 20:     2.15 min --
 
 Total:
 
