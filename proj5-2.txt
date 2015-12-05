@@ -4,11 +4,19 @@ iterations on both Facebook dataset and the Enron dataset, parititioned into
 chunks of 500, on clusters of size 5 and 10. How long do each of these 8
 scenarios take?
 
-**************************  Performance in 8 Scenarios  ***************************
-* Instances | Mode: S FaceBook | Mode: B Facebook | Mode S: Enron | Mode B: Enron *
-*    5            65.43 min          67.14 min        69.35 min       75.55 min   *
-*   10            10.11 min          11.14 min        11.40 min       12.58 min   *
-***********************************************************************************
+**************************  Performance in 8 (36) Scenarios  *************************
+* Instances    | Mode: S FaceBook | Mode: B Facebook | Mode S: Enron | Mode B: Enron *
+*     5              65.43 min         67.14 min        69.35 min       75.55 min    *
+*    10              10.11 min         11.14 min        11.40 min       12.58 min    *
+*------------------------------------------------------------------------------------*
+*    10   (1 part.)   2.06 min         11.37 min         1.63 min        3.30 min    *
+*    10   (2 part.)   1.27 min          4.52 min         1.11 min        1.69 min    *
+*    10   (5 part.)   0.71 min          1.57 min         0.67 min        0.83 min    *
+*    10  (10 part.)   0.67 min          0.89 min         0.46 min        0.56 min    *
+*    10  (20 part.)   0.59 min          0.61 min         0.47 min        0.48 min    *
+*    10  (50 part.)   0.87 min          0.89 min         0.76 min        0.77 min    *
+*    10 (100 part.)   1.87 min          1.38 min         1.22 min        1.25 min    *
+**************************************************************************************
 
 2)
     When running SimplePageRank on the 10 instances with a repartition count of
@@ -36,17 +44,33 @@ you increased the partition count?
 Remember the price of single c1.medium machine is $0.0161 per Hour, and a
 cluster with 10 slaves has 11 machines (the master counts as one).
 
-Pre-part 4:        240 min --
-Part 4 w/ 500:  277.47 min --
-Part 5 w/ 500:   45.23 min --
+**********  Variables  ***********
+* P = $0.0161 (dollars per hour) *
+* C = 10.1195 (hours for certain *
+*               recorded below ) *
+* W = 82.1195 (WORST CASE **)    *
+**********************************
 
-Part 5 w/ 1:     18.36 min --
-Part 5 w/ 2:      8.59 min --
-Part 5 w/ 5:      3.78 min --
-Part 5 w/ 10:     2.58 min --
-Part 5 w/ 20:     2.15 min --
-Part 5 w/ 50:     3.29 min --
-Part 5 w/ 100:    5.72 min --
+** Worst case is if I accidently stayed logged in over the course of a few days
+   at the beginning of the project -- I didn't succeed with make launch-test so
+   I don't think this is the case...
 
-Total:
+***  Recorded Time Running Tasks  ***
+*  Pre-part 4:          240    min  *
+*  part 4 w/ 500:       277.47 min  *
+*  part 5 w/ 500:       45.23  min  *
+*  part 5 w/ 1:         18.36  min  *
+*  part 5 w/ 2:         8.59   min  *
+*  part 5 w/ 5:         3.78   min  *
+*  part 5 w/ 10:        2.58   min  *
+*  part 5 w/ 20:        2.15   min  *
+*  part 5 w/ 50:        3.29   min  *
+*  part 5 w/ 100:       5.72   min  *
+*************************************
 
+Cost running 1 instance   = P *    (4 hours)   * 1 machine   = $0.0644
+Cost running 5 instances  = P * (4.6245 hours) * 5 machines  = $0.37227225
+Cost running 10 instances = P * (1.495 hours)  * 10 machines = $0.240695
+Cost using recorded time: Sum of costs of per # of instances = $0.67736725
+
+Using worst case time on 1 instances (sub 4 hours for 76 hours): $1.83656725
