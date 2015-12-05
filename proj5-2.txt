@@ -24,6 +24,11 @@ scenarios take?
 program for the Enron dataset? How about the Facebook dataset? Does this match
 your expectations?
 
+Facebook file size: 854362 Bytes = 0.85 MB
+Enron file size:    4049333 Bytes = 4.05 MB
+
+FB file size / SimplePageRank run-time (minutes) = 0.0841
+Enron file size / SimplePageRank run-time (minutes) = 0.3553
 
 3)
    What was the speedup for 10 instances relative to 5 instances for 20 iterations
@@ -31,13 +36,19 @@ of BackedgesPageRank on the Enron dataset with a repartition count of 500? What
 do you conclude about how well Spark parallelizes your work? How does the
 algorithm scale in regards to strong scaling? weak scaling?
 
+- 6x speed up
+- strong scaling, weak scaling means increasing the problem size, which we're not doing
 
 4)
-    In part 5, you tinkered with the repartition count. at what repartition
+    In part 5, you tinkered with the repartition count. At what repartition
 count was your code the fastest on average? Why do you think it would go slower
 if you decreased the partition count? Why do you think it would go slower if
 you increased the partition count?
 
+- Fastest performance was with 20 partitions
+- 10 instances (each with 2 cores) means there can be 20 partitions of data
+  being processed in a parallel fashion. Any more or fewer partitions results
+  in a lost of performance.
 
 5)
     How many dollars in EC2 credits did you use to complete this project?
@@ -71,6 +82,6 @@ cluster with 10 slaves has 11 machines (the master counts as one).
 Cost running 1 instance   = P *    (4 hours)   * 1 machine   = $0.0644
 Cost running 5 instances  = P * (4.6245 hours) * 5 machines  = $0.37227225
 Cost running 10 instances = P * (1.495 hours)  * 10 machines = $0.240695
-Cost using recorded time: Sum of costs of per # of instances = $0.67736725
 
-Using worst case time on 1 instances (sub 4 hours for 76 hours): $1.83656725
+Cost using recorded time: Sum of costs of per # of instances    = $0.67736725
+Using worst case time on 1 instances (sub 4 hours for 76 hours) = $1.83656725
