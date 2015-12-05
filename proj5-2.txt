@@ -37,10 +37,16 @@ Remember the price of single c1.medium machine is $0.0161 per Hour, and a
 cluster with 10 slaves has 11 machines (the master counts as one).
 
 Pre-part 4:        240 min --
-Part 4:         277.47 min --
+Part 4 w/ 500:  277.47 min --
 Part 5 w/ 500:   45.23 min --
+
+Part 5 w/ 1:     18.36 min --
+Part 5 w/ 2:      8.59 min --
+Part 5 w/ 5:      3.78 min --
 Part 5 w/ 10:     2.58 min --
 Part 5 w/ 20:     2.15 min --
+Part 5 w/ 50:     3.29 min --
+Part 5 w/ 100:    5.72 min --
 
 Total:
 
