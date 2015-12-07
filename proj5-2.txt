@@ -41,8 +41,20 @@ of BackedgesPageRank on the Enron dataset with a repartition count of 500? What
 do you conclude about how well Spark parallelizes your work? How does the
 algorithm scale in regards to strong scaling? weak scaling?
 
-- 6x speed up
-- Strong scaling, weak scaling means increasing the problem size, which we're not doing
+- The 6x speed up between the 10 instances compared to the 5 instances on the
+  Enron dataset allows us to conclude that Spark parallelizes the work
+very efficiently. Holding dataset and partition count constant, when I double
+the processors, the work is finished in roughly 1/6 of the time (75.55 min for
+5 instances vs 12.58 min for 10 instances). In terms of strong scalability, the
+algorithm clearly scales as the runtime for the Enron dataset with 10
+processors is 6 times faster than the runtime with 5 processors. In terms of
+weak scaling, the algorithm runs roughly 5x faster as we compared the amount of
+time it took to run the BackedgesPageRank for 20 iterations with 5 instances
+(repartition count of 500) over the FB dataset to the amount of time it took to
+run the Enron dataset with 10 instances. This comparison is valid because the
+FB dataset is roughly 2x larger and we are running over it with 1/2 the number
+of instances, which more or less fixes the problem size per processor.
+
 
 4)
     In part 5, you tinkered with the repartition count. At what repartition
