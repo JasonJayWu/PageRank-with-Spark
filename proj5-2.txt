@@ -30,6 +30,11 @@ Enron file size:    4049333 Bytes = 4.05 MB
 FB file size / SimplePageRank run-time (minutes) = 0.0841
 Enron file size / SimplePageRank run-time (minutes) = 0.3553
 
+The above ratios are bytes per minute; it makes sense that the 4x larger dataset,
+Enron, has byte/minute ratio almost 4x higher than in the case with the
+Facebook dataset. This result shows that the EC2 servers are making effective
+use of Mapreduce's performance benefits.
+
 3)
    What was the speedup for 10 instances relative to 5 instances for 20 iterations
 of BackedgesPageRank on the Enron dataset with a repartition count of 500? What
@@ -37,7 +42,7 @@ do you conclude about how well Spark parallelizes your work? How does the
 algorithm scale in regards to strong scaling? weak scaling?
 
 - 6x speed up
-- strong scaling, weak scaling means increasing the problem size, which we're not doing
+- Strong scaling, weak scaling means increasing the problem size, which we're not doing
 
 4)
     In part 5, you tinkered with the repartition count. At what repartition
@@ -79,9 +84,9 @@ cluster with 10 slaves has 11 machines (the master counts as one).
 *  part 5 w/ 100:       5.72   min  *
 *************************************
 
-Cost running 1 instance   = P *    (4 hours)   * 1 machine   = $0.0644
-Cost running 5 instances  = P * (4.6245 hours) * 5 machines  = $0.37227225
-Cost running 10 instances = P * (1.495 hours)  * 10 machines = $0.240695
+Cost running 1 instance   = P *    (4 hours)   * 1 machine   + master  = $0.1288
+Cost running 5 instances  = P * (4.6245 hours) * 5 machines  + master  = $0.4467267
+Cost running 10 instances = P * (1.495 hours)  * 10 machines + master  = $0.2647645
 
-Cost using recorded time: Sum of costs of per # of instances    = $0.67736725
-Using worst case time on 1 instances (sub 4 hours for 76 hours) = $1.83656725
+Cost using recorded time: Sum of costs of per # of instances    = $0.8402912
+** Using worst case time on 1 instances (sub 4 hours for 76 hours) = $3.1586912
