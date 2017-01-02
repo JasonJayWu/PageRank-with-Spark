@@ -1,5 +1,5 @@
 # PageRank-with-Spark
-Implemented two different variatinos of Sergey Bring and Larry Page's Pagerank algorithm using MapReduce. Modeled PageRank scores with discrete time Markov chains. 
+Implemented two different variations of Sergey Brin and Larry Page's Pagerank algorithm using the MapReduce programming paradigm. PageRank scores were used to represent the probability that a user is at some page at a given point in time. A discrete time Markov chain was used to model the behavior of users browsing the web. 
 
 
 
